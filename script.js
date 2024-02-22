@@ -41,7 +41,23 @@ function atualizaTabela() {
 function mascara(e) {
     const inputTelefone = document.getElementById('telefone')
 
-    if (e.inputType === 'deleteContentBackward') return
+    if (e.inputType === 'deleteContentBackward' || e.inputType === 'deleteContentForward') inputTelefone.value = ''
+
+    if ((!e.inputType || e.inputType === 'insertFromPaste') && e.type === 'input') {
+        const numero = inputTelefone.value.replaceAll(' ', '')
+
+        if (numero.length === 11) {
+            const numeroFormatado = `(${numero[0] + numero[1]}) 9 ${numero.substring(3).slice(0, -4)}-${numero.substring(7)}`
+
+            inputTelefone.value = numeroFormatado
+        }
+
+        if (numero.length === 10) {
+            const numeroFormatado = `(${numero[0] + numero[1]}) 9 ${numero.substring(2).slice(0, -4)}-${numero.substring(6)}`
+
+            inputTelefone.value = numeroFormatado
+        }
+    }
 
     if (inputTelefone.value.length == 1)
         inputTelefone.value = '(' + inputTelefone.value
@@ -51,6 +67,4 @@ function mascara(e) {
         inputTelefone.value = inputTelefone.value + ' '
     if (inputTelefone.value.length == 11)
         inputTelefone.value = inputTelefone.value + '-'
-
-    console.log(e)
 }
